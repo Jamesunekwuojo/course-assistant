@@ -28,3 +28,4 @@ def build_index(documents):
     )
     index.fit(documents)
     return index
+
