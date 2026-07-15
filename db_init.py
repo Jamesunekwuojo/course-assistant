@@ -7,11 +7,11 @@ print(f"Using timezone: {DB_TIMEZONE}")
 
 def get_db_connection():
     return psycopg.connect(
-        host=os.getenv("POSTGRES_HOST", "localhost"),
-        port=os.getenv("POSTGRES_PORT", "5434"),
-        dbname=os.getenv("POSTGRES_DB", "course_assistant"),
-        user=os.getenv("POSTGRES_USER", "user"),
-        password=os.getenv("POSTGRES_PASSWORD", "password"),
+        host=os.getenv("POSTGRES_HOST") or "127.0.0.1",
+        port=os.getenv("POSTGRES_PORT") or "5434",
+        dbname=os.getenv("POSTGRES_DB") or "course_assistant",
+        user=os.getenv("POSTGRES_USER") or "user",
+        password=os.getenv("POSTGRES_PASSWORD") or "password",
     )
 
 def init_db(drop=False):
