@@ -17,6 +17,8 @@ CONTEXT:
 
 class RAGBase:
 
+    MODEL="openai/gpt-oss-120b"
+
     def __init__(
         self,
         index,
@@ -24,7 +26,7 @@ class RAGBase:
         instructions=INSTRUCTIONS,
         prompt_template=PROMPT_TEMPLATE,
         course='llm-zoomcamp',
-        model='gpt-5.4-mini'
+        model=MODEL
     ):
         self.index = index
         self.llm_client = llm_client
