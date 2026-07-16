@@ -5,6 +5,9 @@ from db_feedback import save_feedback
 
 from db_save import save_conversation
 
+from judge import evaluate_relevance
+
+
 assistant = create_assistant()
 
 st.title("Course Assistant")
@@ -23,20 +26,26 @@ if st.button("Ask"):
         st.write(f"Completion tokens: {record.completion_tokens}")
         st.write(f"Cost: ${record.cost:.4f}")
 
+        conversation_id = save_conversation(record, user_input, "llm-zoomcamp")
+        st.session_state.conversation_id = conversation_id
 
-conversation_id = save_conversation(record, user_input, "llm-zoomcamp")
-st.session_state.conversation_id = conversation_id
+        relevance, explanation = evaluate_relevance(user_input, answer)
+        save_feedback(conversation_id, "judge",relevance, explanation)
+
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("+1"):
+                cid = st.session_state.conversation_id
+                save_feedback(cid, "user", score=1)
+                st.write("Thanks!")
+
+        with col2:
+            if st.button("-1"):
+                cid = st.session_state.conversation_id
+                save_feedback(cid, "user", score=-1)
+                st.write("Thanks for the feedback!")
 
 
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("+1"):
-        cid = st.session_state.conversation_id
-        save_feedback(cid, "user", score=1)
-        st.write("Thanks!")
 
-with col2:
-    if st.button("-1"):
-        cid = st.session_state.conversation_id
-        save_feedback(cid, "user", score=-1)
-        st.write("Thanks for the feedback!")
+
+
